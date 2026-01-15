@@ -1,6 +1,6 @@
 # XAU-EDGE-TRADER-V1
 
-A quantitative trading **research & execution showcase** for XAUUSD (Gold), built to demonstrate how modern ML systems can be structured for **signal generation, risk-aware decision making, and live execution**.
+A quantitative trading **research & execution showcase** for XAUUSD (Gold), built to demonstrate how modern ML systems can be structured for **signal generation, risk-aware decision making, and live execution**. The goal was to create a script that can use a neural net to make money trading XAUUSD. 
 
 This repository focuses on:
 - feature-driven neural models for **trend vs mean-reversion**
