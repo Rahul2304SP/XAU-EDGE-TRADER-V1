@@ -16,7 +16,7 @@ This is a **portfolio / showcase repo** intended for quant, systematic trading, 
 
 The project is built around **two layers**:
 
-### 1️⃣ Base Model (Signal + Risk Structure)
+### 1️ Base Model (Signal + Risk Structure)
 **`mr_sltp_edge_kelly.py`**
 
 - Learns market structure (trend vs mean-reversion)
@@ -27,7 +27,7 @@ The project is built around **two layers**:
   - dry-run live loop
   - real live execution via MT5
 
-### 2️⃣ Meta-Policy (Decision Layer)
+### 2️ Meta-Policy (Decision Layer)
 **`ensemble_meta_policy.py`**
 
 - Treats one or more base models as **teachers**
@@ -102,7 +102,7 @@ pip install torch numpy pandas scikit-learn matplotlib tensorboard MetaTrader5
 
 ## Option A — Run the Base Model
 
-### 1️⃣ Prepare data
+### 1️ Prepare data
 The base model can load data from:
 - MT5 directly, or
 - CSV files (recommended for reproducibility)
@@ -113,7 +113,7 @@ Place CSVs in your data directory (e.g. `Data/raw/`).
 
 ---
 
-### 2️⃣ Train the model
+### 2️ Train the model
 Running without `--live` triggers training by default:
 ```bash
 python mr_sltp_edge_kelly.py
@@ -127,7 +127,7 @@ This will:
 
 ---
 
-### 3️⃣ Run live (DRY RUN first)
+### 3️ Run live (DRY RUN first)
 ```bash
 python mr_sltp_edge_kelly.py --live --dry_run
 ```
@@ -147,12 +147,12 @@ This is the **strongest demonstration** for quant roles: it shows signal abstrac
 
 ---
 
-### 1️⃣ Ensure base model checkpoints exist
+### 1️ Ensure base model checkpoints exist
 Train at least one base model using `mr_sltp_edge_kelly.py`.
 
 ---
 
-### 2️⃣ Train the ENTRY policy
+### 2️ Train the ENTRY policy
 ```bash
 python ensemble_meta_policy.py --train
 ```
@@ -165,7 +165,7 @@ This will:
 
 ---
 
-### 3️⃣ Train the EXIT policy
+### 3️ Train the EXIT policy
 ```bash
 python ensemble_meta_policy.py --train_exit_policy
 ```
@@ -177,7 +177,7 @@ This:
 
 ---
 
-### 4️⃣ Run live (DRY RUN first)
+### 4️ Run live (DRY RUN first)
 ```bash
 python ensemble_meta_policy.py --live --dry_run
 ```
@@ -216,21 +216,6 @@ Launch TensorBoard:
 tensorboard --logdir Outputs
 ```
 
----
-
-## Why this repo is relevant for quant roles
-
-This project demonstrates:
-
-- separation of forecasting and decision-making
-- risk-aware exits learned independently
-- realistic execution loops (dry-run vs live)
-- strong ML engineering hygiene (logging, checkpoints, reproducibility)
-
-The architecture mirrors how real trading desks structure systematic strategies.
-
----
-
 ## Safety & disclaimer
 
 This is **research code**.
@@ -241,7 +226,6 @@ This is **research code**.
 ---
 
 ## Future extensions
-- multi-symbol support
 - portfolio-level risk constraints
 - walk-forward validation tooling
 - agentic / reinforcement-style policy refinement
