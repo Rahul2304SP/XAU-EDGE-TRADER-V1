@@ -11,17 +11,6 @@ A trimmed, credential-free snapshot of the gold forecasting work: MT5 data scrap
 - Meta-ensemble: `ensemble_meta_policy.py` consumes teacher outputs plus context features to decide BUY/SELL/NO_TRADE and learned EXIT.
 - Evaluation: `mt5_trade_stats.py` parses MT5 reports for trade-level and bot-level metrics; plots go in `assets/`.
 
-### Flow
-```mermaid
-flowchart LR
-    A[MT5 Terminal\n(env-configured)] --> B[mt5_scraper.py\nM1 / ticks -> CSV]
-    B --> C[Teacher Models\nmr_sltp_edge_kelly.py\n(checkpoints you provide)]
-    C --> D[Meta-Policy Ensemble\nensemble_meta_policy.py\n(entry + exit decisions)]
-    D --> E[MT5 Orders\n(live/dry-run)]
-    E --> F[MT5 Reports\nXLSX exports]
-    F --> G[mt5_trade_stats.py\ntrade/bot metrics]
-    D --> H[Logs/Plots\nassets/]
-```
 
 ## What''s inside
 - `src/data/mt5_scraper.py`: MT5 M1/tick scraper with env-driven auth (no hardcoded keys).
