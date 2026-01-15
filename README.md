@@ -143,8 +143,6 @@ Remove `--dry_run` only after demo testing.
 
 ## Option B — Run the Meta-Policy Ensemble (Recommended Showcase)
 
-This is the **strongest demonstration** for quant roles: it shows signal abstraction, decision learning, and control separation.
-
 ---
 
 ### 1️ Ensure base model checkpoints exist
@@ -219,9 +217,9 @@ tensorboard --logdir Outputs
 ## Safety & disclaimer
 
 This is **research code**.
+- Although this code can and may produce profits. Do not rely on it without extensive testing and certainly do not risk large capital without additional risk management controls. 
 - Use demo accounts first
 - Apply strict risk limits
-- Expect losses during experimentation
 
 ---
 
