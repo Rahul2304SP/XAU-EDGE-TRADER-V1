@@ -1,38 +1,70 @@
-# XAU-EDGE-TRADER-V1
-Gold forecasting showcase: MT5 data scraper, a meta-ensemble controller, and a 15m edge/Kelly SLTP model, plus MT5 trade-report analytics. Includes env-driven MT5 setup (no credentials), synthetic sample data for schema, and placeholder checkpoints—ready to demo how you ingest MT5 data, run an ensemble of teacher models, and analyze results.
+# XAU-EDGE-TRADER-V1 (Showcase Repo)
 
-# Gold Forecasting Showcase
+This repository is a **quant/ML trading systems showcase** built around:
+1) a **base XAUUSD neural model** that learns **regime + entries + exits + sizing components**, and  
+2) a **meta-policy ensemble** that learns **when to enter** (BUY/SELL/NO_TRADE) and **when to exit** (HOLD/EXIT) by consuming signals from one or more base models.
 
-A trimmed, credential-free snapshot of the gold forecasting work: MT5 data scraping, a meta-policy ensemble, a mean-reversion SL/TP model, and MT5 trade-report analytics. All sensitive paths and credentials have been removed; bring your own checkpoints and MT5 access.
+It’s designed to demonstrate:
+- **end-to-end ML pipeline thinking** (feature engineering → supervised labels → training → evaluation → live execution)
+- **risk-aware objectives** (drawdown penalties, tail-aware return heads, max hold constraints)
+- **production-style engineering** (logging, checkpoints, deterministic outputs, MT5 integration)
 
-## Architecture at a glance
-- Data ingestion: `mt5_scraper.py` pulls M1/ticks and writes symbol CSVs.
-- Teacher models: `mr_sltp_edge_kelly.py` (and any others you plug in) emit `p_trade`/`p_dir` probabilities on their own feature pipelines.
-- Meta-ensemble: `ensemble_meta_policy.py` consumes teacher outputs plus context features to decide BUY/SELL/NO_TRADE and learned EXIT.
-- Evaluation: `mt5_trade_stats.py` parses MT5 reports for trade-level and bot-level metrics; plots go in `assets/`.
+---
 
+## What’s in this repo
 
-## What''s inside
-- `src/data/mt5_scraper.py`: MT5 M1/tick scraper with env-driven auth (no hardcoded keys).
-- `src/models/ensemble_meta_policy.py`: meta-ensemble for entries/exits using teacher models (placeholder ckpts/paths).
-- `src/models/mr_sltp_edge_kelly.py`: trend vs mean-reversion model with edge/kelly sizing logic (MT5 routing via env).
-- `src/stats/mt5_trade_stats.py`: MT5 Excel report parser to per-trade and per-bot metrics.
-- `data/sample_xau_m1.csv`: tiny synthetic M1 sample to demonstrate expected schema.
-- `assets/`: drop your plots/equity curves before publishing.
+### 1) `mr_sltp_edge_kelly.py` — Base Model (Trend vs Mean Reversion)
+A multi-head supervised model for XAUUSD that builds features from minute bars and learns:
+- trend vs mean-reversion structure
+- entry gating + direction
+- multiple auxiliary heads (edge / quantile distribution / transition, etc.)
+- dynamic SL/TP components and (optional) Kelly-style sizing logic
 
-## Quickstart
-1) `python -m venv .venv && .venv/Scripts/Activate.ps1` (or use your env).
-2) `pip install -r requirements.txt`
-3) Copy `.env.example` to `.env` and fill MT5 values; or pass `--login/--password/--server` flags.
-4) Kick the scraper on sample symbols (history only):
-   `python src/data/mt5_scraper.py --mode m1 --symbols XAUUSD --oneshot`
-5) Wire your checkpoints into `src/models/ensemble_meta_policy.py` (`DEFAULT_MODEL_SPECS`) and run dry-run inference:
-   `python src/models/ensemble_meta_policy.py --live --dry_run`
-6) Parse an MT5 report:
-   `python src/stats/mt5_trade_stats.py path/to/ReportHistory.xlsx`
+It can run in:
+- **train mode** (default when you run it without `--live`)
+- **live mode** via MT5 (`--live`)
+- **dry run** (runs the live loop but does not place orders) (`--dry_run`) :contentReference[oaicite:2]{index=2}
 
-## Notes
-- No model weights are shipped; point `ckpt_path` to your files before live use.
-- MT5 terminal paths are env-driven to avoid leaking local installs.
-- Sample data is synthetic and for structure only; replace with your exports.
-- Add screenshots (e.g., feature importance, equity curve) to `assets/` before publishing.
+### 2) `ensemble_meta_policy.py` — Meta-Policy Ensemble (Learned Entry + Learned Exit)
+This script treats base models as **teachers** and trains two small policies:
+- **Entry policy**: BUY / SELL / NO_TRADE (only acts when flat)
+- **Exit policy**: HOLD / EXIT (only acts when in a position)
+
+Key point: exits are learned and **do not depend on “signal flip”**. :contentReference[oaicite:3]{index=3}
+
+It supports:
+- `--train` (train entry policy; default mode)
+- `--train_exit_policy` (train exit policy; will train entry policy first if missing)
+- `--live` (run live; will auto-pick latest checkpoints or train if missing)
+- `--dry_run` (recommended first) :contentReference[oaicite:4]{index=4} :contentReference[oaicite:5]{index=5}
+
+---
+
+## Requirements
+
+### Hardware
+- **CUDA GPU is required** (both scripts explicitly refuse CPU-only environments). :contentReference[oaicite:6]{index=6} :contentReference[oaicite:7]{index=7}
+
+### Software
+- Python 3.10+ recommended
+- Key packages used in the code:
+  - `torch`, `numpy`, `pandas`
+  - `tensorboard`
+  - `scikit-learn`
+  - `matplotlib`
+  - `MetaTrader5` (only required if you run live MT5 mode)
+
+---
+
+## Quickstart (Step-by-step)
+
+### Step 0 — Clone and create a virtual environment
+```bash
+git clone https://github.com/Rahul2304SP/XAU-EDGE-TRADER-V1.git
+cd XAU-EDGE-TRADER-V1
+
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
