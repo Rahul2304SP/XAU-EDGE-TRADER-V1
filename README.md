@@ -1,7 +1,7 @@
 # XAU-EDGE-TRADER-V1
 Gold forecasting showcase: MT5 data scraper, a meta-ensemble controller, and a 15m edge/Kelly SLTP model, plus MT5 trade-report analytics. Includes env-driven MT5 setup (no credentials), synthetic sample data for schema, and placeholder checkpoints—ready to demo how you ingest MT5 data, run an ensemble of teacher models, and analyze results.
 
-# Gold Forecasting Showcase (Public Slice)
+# Gold Forecasting Showcase
 
 A trimmed, credential-free snapshot of the gold forecasting work: MT5 data scraping, a meta-policy ensemble, a mean-reversion SL/TP model, and MT5 trade-report analytics. All sensitive paths and credentials have been removed; bring your own checkpoints and MT5 access.
 
