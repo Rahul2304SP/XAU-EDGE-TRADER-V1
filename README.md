@@ -139,6 +139,8 @@ python mr_sltp_edge_kelly.py --live --dry_run --mt5_path "C:\Path\To\terminal64.
 
 Remove `--dry_run` only after demo testing.
 
+Note: During the start of a live deployment the startup calibration pass runs the trained model over a recent or full feature frame (from cache) to collect trade-effectiveness scores per regime (trend vs MR), takes a chosen percentile (e.g., 75th) as fresh entry thresholds, clips them, checks minimum sample counts, and if valid overwrites LIVE_TRADE_EFF_THR_TREND and LIVE_TRADE_EFF_THR_MR; it logs batch progress, regime stats, and can save the thresholds to startup_thresholds.json, so live entry gates are tuned to current data before orders are sent.
+
 ---
 
 ## Option B — Run the Meta-Policy Ensemble (Recommended Showcase)
