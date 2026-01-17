@@ -37,7 +37,7 @@ The project is built around **two layers**:
 - Exits are **learned independently**, not based on signal flips
 - Can train automatically if checkpoints are missing, then switch to live mode
 
-This mirrors how real trading systems separate **forecasting** from **decision control**.
+This separates **forecasting** from **decision control**.
 
 ---
 
@@ -109,7 +109,9 @@ The base model can load data from:
 
 Use **XAUUSD M1 data** with standard OHLC columns.
 
-Place CSVs in your data directory (e.g. `Data/raw/`).
+Place CSVs in your data directory (e.g. `Data/raw/`). 
+
+Then point line 
 
 ---
 
